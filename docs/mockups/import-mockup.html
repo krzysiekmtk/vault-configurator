@@ -1,0 +1,294 @@
+<title>Vault Configurator — Import & Reorganize (mockup)</title>
+<meta name="description" content="Rough UI mockup of the Import existing vault → reorganize → download feature.">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --soft: #12121a;
+    --card: #16161f;
+    --hover: #1d1d28;
+    --border: #262633;
+    --border-soft: #1e1e29;
+    --brand: #7c5cff;
+    --brand-hover: #8f72ff;
+    --brand-soft: #2a2350;
+    --mint: #4cffbf;
+    --muted: #8a8aa0;
+    --text: #e7e7ef;
+    --add: #4cffbf;
+    --move: #5aa8ff;
+    --rename: #f5b14c;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 12% -10%, rgba(124,92,255,0.14), transparent 60%),
+      radial-gradient(50rem 35rem at 100% 0%, rgba(76,255,191,0.07), transparent 55%);
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  .brandrow { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 40px; height: 40px; border-radius: 12px; background: var(--brand-soft); color: var(--brand);
+          display: grid; place-items: center; font-size: 20px; }
+  h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0; }
+  .mockup-badge { font-family: var(--mono); font-size: 11px; color: var(--rename);
+                  border: 1px solid color-mix(in srgb, var(--rename) 40%, transparent);
+                  background: color-mix(in srgb, var(--rename) 12%, transparent);
+                  padding: 4px 9px; border-radius: 7px; letter-spacing: 0.04em; }
+
+  /* mode tabs */
+  .modes { display: inline-flex; gap: 4px; background: var(--soft); border: 1px solid var(--border);
+           border-radius: 11px; padding: 4px; margin: 18px 0 22px; }
+  .modes button { font: inherit; font-size: 13px; font-weight: 600; color: var(--muted);
+                  background: none; border: 0; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+  .modes button.active { background: var(--brand); color: white; }
+
+  /* grid */
+  .cols { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 20px; }
+  @media (max-width: 880px) { .cols { grid-template-columns: 1fr; } }
+
+  .card { background: color-mix(in srgb, var(--card) 80%, transparent); border: 1px solid var(--border);
+          border-radius: 14px; overflow: hidden; }
+  .card > header { padding: 13px 16px; border-bottom: 1px solid var(--border-soft);
+                   display: flex; align-items: center; gap: 10px; }
+  .card > header .ic { color: var(--brand); display: grid; place-items: center; }
+  .card > header h2 { font-size: 14px; margin: 0; }
+  .card > header p { font-size: 12px; color: var(--muted); margin: 1px 0 0; }
+  .body { padding: 16px; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+
+  /* dropzone (loaded state) */
+  .drop { border: 1.5px dashed color-mix(in srgb, var(--brand) 45%, var(--border));
+          border-radius: 12px; background: color-mix(in srgb, var(--brand) 6%, transparent);
+          padding: 18px; display: flex; align-items: center; gap: 14px; }
+  .drop .big { width: 44px; height: 44px; border-radius: 11px; background: var(--brand-soft);
+               color: var(--brand); display: grid; place-items: center; font-size: 22px; flex: none; }
+  .drop .meta { min-width: 0; }
+  .drop .meta strong { font-size: 14px; }
+  .drop .meta span { display: block; font-size: 12px; color: var(--muted); }
+  .drop .swap { margin-left: auto; font: inherit; font-size: 12px; color: var(--text); cursor: pointer;
+                background: var(--hover); border: 1px solid var(--border); border-radius: 8px; padding: 7px 11px; }
+
+  .scanrow { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { font-family: var(--mono); font-size: 12px; color: var(--muted);
+          background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 5px 9px; }
+  .chip b { color: var(--text); font-weight: 600; }
+
+  /* transform options */
+  .opt { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+         padding: 11px 0; border-top: 1px solid var(--border-soft); }
+  .opt:first-child { border-top: 0; }
+  .opt .label { font-size: 13px; }
+  .opt .label small { display: block; color: var(--muted); font-size: 12px; }
+  .seg { display: inline-flex; gap: 3px; background: var(--soft); border: 1px solid var(--border);
+         border-radius: 9px; padding: 3px; flex: none; }
+  .seg span { font-size: 12px; padding: 5px 10px; border-radius: 6px; color: var(--muted); white-space: nowrap; }
+  .seg span.on { background: var(--brand); color: white; }
+  .toggle { width: 42px; height: 24px; border-radius: 999px; background: var(--brand); position: relative; flex: none; }
+  .toggle.off { background: var(--hover); border: 1px solid var(--border); }
+  .toggle i { position: absolute; top: 3px; left: 21px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+  .toggle.off i { left: 3px; }
+
+  /* change report */
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 4px; }
+  .stat { background: var(--soft); border: 1px solid var(--border); border-radius: 11px; padding: 12px; }
+  .stat .n { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .stat .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat.add .n { color: var(--add); }
+  .stat.move .n { color: var(--move); }
+  .stat.rename .n { color: var(--rename); }
+
+  .difflist { display: flex; flex-direction: column; }
+  .diff { display: grid; grid-template-columns: 64px 1fr; gap: 10px; padding: 9px 0;
+          border-top: 1px solid var(--border-soft); align-items: baseline; }
+  .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase;
+         padding: 3px 0; text-align: center; border-radius: 6px; }
+  .tag.move { color: var(--move); background: color-mix(in srgb, var(--move) 13%, transparent); }
+  .tag.rename { color: var(--rename); background: color-mix(in srgb, var(--rename) 13%, transparent); }
+  .tag.tags { color: var(--mint); background: color-mix(in srgb, var(--mint) 13%, transparent); }
+  .tag.add { color: var(--add); background: color-mix(in srgb, var(--add) 13%, transparent); }
+  .diff .path { font-family: var(--mono); font-size: 12px; line-height: 1.5; word-break: break-word; }
+  .diff .path .from { color: var(--muted); }
+  .diff .path .arrow { color: var(--muted); padding: 0 6px; }
+  .diff .path .to { color: var(--text); }
+  .strike { text-decoration: line-through; opacity: 0.6; }
+
+  /* CTA */
+  .cta { width: 100%; font: inherit; font-size: 15px; font-weight: 600; color: white;
+         background: var(--brand); border: 0; border-radius: 11px; padding: 14px; cursor: pointer;
+         display: flex; align-items: center; justify-content: center; gap: 9px;
+         box-shadow: 0 0 0 1px rgba(124,92,255,0.35); }
+  .cta:hover { background: var(--brand-hover); }
+  .cta.secondary { background: var(--hover); color: var(--text); box-shadow: none; border: 1px solid var(--border); font-size: 13px; padding: 10px; }
+  .note { font-size: 12px; color: var(--muted); text-align: center; }
+  .note b { color: var(--mint); }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  svg.i { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: 12px; }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brandrow">
+      <div class="logo" aria-hidden="true">
+        <svg class="i" viewBox="0 0 24 24" style="width:22px;height:22px"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5"/><path d="M12 12v9"/></svg>
+      </div>
+      <div>
+        <h1>Vault Configurator</h1>
+        <p class="sub">Import an existing vault, reorganize it to your rules, download the result.</p>
+      </div>
+    </div>
+    <span class="mockup-badge">MOCKUP · not functional</span>
+  </div>
+
+  <div class="modes" role="tablist" aria-label="Mode">
+    <button role="tab">Create new vault</button>
+    <button role="tab" class="active" aria-selected="true">Import &amp; reorganize</button>
+  </div>
+
+  <div class="cols">
+    <!-- LEFT: source + transforms -->
+    <div class="stack">
+      <section class="card">
+        <header>
+          <span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+          <div><h2>Your vault</h2><p>Drop a .zip or pick the vault folder. Nothing is uploaded — it stays on your device.</p></div>
+        </header>
+        <div class="body stack">
+          <div class="drop">
+            <div class="big" aria-hidden="true">📦</div>
+            <div class="meta">
+              <strong>Knowledge.zip</strong>
+              <span>Detected as an Obsidian vault · 342 notes · 28 attachments</span>
+            </div>
+            <button class="swap">Change</button>
+          </div>
+          <div class="scanrow">
+            <span class="chip"><b>342</b> markdown</span>
+            <span class="chip"><b>1,204</b> wikilinks</span>
+            <span class="chip"><b>61</b> tags</span>
+            <span class="chip"><b>5</b> top-level folders</span>
+            <span class="chip">existing <b>.obsidian/</b> found</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <header>
+          <span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/></svg></span>
+          <div><h2>How to reorganize</h2><p>Same toggles as a new vault — applied to your existing notes.</p></div>
+        </header>
+        <div class="body">
+          <div class="opt">
+            <div class="label">Folder structure
+              <small>Route notes into the target layout by their type tags</small></div>
+            <div class="seg"><span>Keep</span><span>Standard</span><span class="on">PARA</span></div>
+          </div>
+          <div class="opt">
+            <div class="label">Tag style
+              <small>Rewrite tags across every note</small></div>
+            <div class="seg"><span>Nested</span><span class="on">Flat · #note</span></div>
+          </div>
+          <div class="opt">
+            <div class="label">Filename prefix
+              <small>Rename notes consistently</small></div>
+            <div class="seg"><span>None</span><span class="on">[MM-DD-YYYY]</span></div>
+          </div>
+          <div class="opt">
+            <div class="label">Rewrite <code>[[wikilinks]]</code> on rename
+              <small>Keep links intact when files are renamed</small></div>
+            <div class="toggle" aria-label="on"><i></i></div>
+          </div>
+          <div class="opt">
+            <div class="label">Refresh <code>.obsidian/</code> config
+              <small>Enable your chosen core plugins &amp; settings</small></div>
+            <div class="toggle" aria-label="on"><i></i></div>
+          </div>
+          <div class="opt">
+            <div class="label">Add missing templates
+              <small>Daily / Project / Meeting if absent</small></div>
+            <div class="toggle off" aria-label="off"><i></i></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT: change report + CTA -->
+    <div class="stack">
+      <button class="cta">
+        <svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        Download reorganized vault (.zip)
+      </button>
+
+      <section class="card">
+        <header>
+          <span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+          <div><h2>Change report</h2><p>Preview every edit before you download. Your original is never touched.</p></div>
+        </header>
+        <div class="body stack">
+          <div class="summary">
+            <div class="stat rename"><div class="n">342</div><div class="k">renamed</div></div>
+            <div class="stat move"><div class="n">298</div><div class="k">moved</div></div>
+            <div class="stat add"><div class="n">2</div><div class="k">added</div></div>
+          </div>
+          <div class="legend">
+            <span><i class="dot" style="background:var(--move)"></i>moved</span>
+            <span><i class="dot" style="background:var(--rename)"></i>renamed</span>
+            <span><i class="dot" style="background:var(--mint)"></i>tags</span>
+            <span><i class="dot" style="background:var(--add)"></i>added</span>
+          </div>
+
+          <div class="difflist">
+            <div class="diff">
+              <span class="tag move">move</span>
+              <div class="path"><span class="from">Inbox/Q3 launch plan.md</span><span class="arrow">→</span><span class="to">10 Projects/[09-14-2026] Q3 launch plan.md</span></div>
+            </div>
+            <div class="diff">
+              <span class="tag tags">tags</span>
+              <div class="path"><span class="strike">#type/project #status/wip</span><span class="arrow">→</span><span class="to">#project #wip</span></div>
+            </div>
+            <div class="diff">
+              <span class="tag move">move</span>
+              <div class="path"><span class="from">Notes/Health routine.md</span><span class="arrow">→</span><span class="to">20 Areas/[01-02-2026] Health routine.md</span></div>
+            </div>
+            <div class="diff">
+              <span class="tag rename">rename</span>
+              <div class="path"><span class="from">Resources/api-cheatsheet.md</span><span class="arrow">→</span><span class="to">30 Resources/[11-30-2025] api-cheatsheet.md</span></div>
+            </div>
+            <div class="diff">
+              <span class="tag tags">links</span>
+              <div class="path"><span class="to">14 wikilinks pointing at renamed notes rewritten</span></div>
+            </div>
+            <div class="diff">
+              <span class="tag add">add</span>
+              <div class="path"><span class="to">Templates/Daily Note.md · .obsidian/core-plugins.json</span></div>
+            </div>
+          </div>
+
+          <button class="cta secondary">Review all 642 changes</button>
+          <p class="note">Runs in your browser. <b>Original vault stays untouched</b> — you get a fresh copy.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <p class="footer">Rough mockup of a proposed feature — layout and copy only, no working logic yet.</p>
+</div>
