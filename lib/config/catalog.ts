@@ -37,20 +37,22 @@ export const DAILY_SECTIONS: { key: DailyNoteSectionKey; label: string }[] = [
   { key: "summary", label: "Summary" },
 ];
 
-export const CORE_PLUGINS: { key: CorePluginKey; label: string; description: string }[] = [
-  { key: "dailyNotes", label: "Daily Notes", description: "Create one note per day from a template." },
-  { key: "templates", label: "Templates", description: "Insert reusable note templates." },
-  { key: "graphView", label: "Graph View", description: "Visualize links between notes." },
-  { key: "backlinks", label: "Backlinks", description: "See notes that link to the current one." },
-  { key: "bookmarks", label: "Bookmarks", description: "Pin important notes and searches." },
-  { key: "audioRecorder", label: "Audio Recorder", description: "Record voice memos into a note." },
+// `obsidianId` is the official plugin identifier Obsidian uses in its config
+// files (`.obsidian/core-plugins.json`, `.obsidian/community-plugins.json`).
+export const CORE_PLUGINS: { key: CorePluginKey; label: string; description: string; obsidianId: string }[] = [
+  { key: "dailyNotes", label: "Daily Notes", description: "Create one note per day from a template.", obsidianId: "daily-notes" },
+  { key: "templates", label: "Templates", description: "Insert reusable note templates.", obsidianId: "templates" },
+  { key: "graphView", label: "Graph View", description: "Visualize links between notes.", obsidianId: "graph" },
+  { key: "backlinks", label: "Backlinks", description: "See notes that link to the current one.", obsidianId: "backlink" },
+  { key: "bookmarks", label: "Bookmarks", description: "Pin important notes and searches.", obsidianId: "bookmarks" },
+  { key: "audioRecorder", label: "Audio Recorder", description: "Record voice memos into a note.", obsidianId: "audio-recorder" },
 ];
 
-export const COMMUNITY_PLUGINS: { key: CommunityPluginKey; label: string; description: string }[] = [
-  { key: "tasks", label: "Tasks", description: "Query and manage checkboxes across the vault." },
-  { key: "kanban", label: "Kanban", description: "Markdown-backed kanban boards." },
-  { key: "dataview", label: "Dataview", description: "Query notes like a database." },
-  { key: "excalidraw", label: "Excalidraw", description: "Hand-drawn sketches and diagrams." },
-  { key: "templater", label: "Templater", description: "Powerful scripted templates." },
-  { key: "calendar", label: "Calendar", description: "Calendar view for daily notes." },
+export const COMMUNITY_PLUGINS: { key: CommunityPluginKey; label: string; description: string; obsidianId: string }[] = [
+  { key: "tasks", label: "Tasks", description: "Query and manage checkboxes across the vault.", obsidianId: "obsidian-tasks-plugin" },
+  { key: "kanban", label: "Kanban", description: "Markdown-backed kanban boards.", obsidianId: "obsidian-kanban" },
+  { key: "dataview", label: "Dataview", description: "Query notes like a database.", obsidianId: "dataview" },
+  { key: "excalidraw", label: "Excalidraw", description: "Hand-drawn sketches and diagrams.", obsidianId: "obsidian-excalidraw-plugin" },
+  { key: "templater", label: "Templater", description: "Powerful scripted templates.", obsidianId: "templater-obsidian" },
+  { key: "calendar", label: "Calendar", description: "Calendar view for daily notes.", obsidianId: "calendar" },
 ];

@@ -47,7 +47,7 @@ The image uses a multi-stage build on top of Next.js `standalone` output, so it 
 
 ```bash
 docker build -t vault-configurator .
-docker run -p 3000:3000 vault-configurator
+docker run -p 3001:3000 vault-configurator
 ```
 
 Or with Docker Compose:
@@ -56,7 +56,9 @@ Or with Docker Compose:
 docker compose up --build
 ```
 
-Then open <http://localhost:3000>.
+Then open <http://localhost:3001>. The container listens on `3000` internally;
+the host port is `3001` (change the left side of `-p` / the compose `ports` mapping
+to use a different one).
 
 ## npm scripts
 
@@ -116,7 +118,7 @@ generation server-side — no rewrite of the core logic.
 ## Known MVP limitations
 
 - No backend, database, accounts, payments or marketplace.
-- Does **not** install Obsidian plugins — it produces recommendations and instructions.
+- **Core** plugins and settings are pre-enabled via a bundled `.obsidian/` config, so the vault opens ready to use. **Community** plugins are pre-listed and auto-enable once installed, but their code is not bundled — Obsidian downloads that itself.
 - Does **not** run Git or touch iCloud on your machine.
 - The Graph View is a stylized mock, not a real graph.
 - Share links live in the URL hash only (not stored server-side).

@@ -2,6 +2,7 @@ import type { VaultConfig } from "../config/types";
 import { CORE_PLUGINS, COMMUNITY_PLUGINS } from "../config/catalog";
 import { getActiveTags } from "../config/activeTags";
 import { generateDailyNote } from "./generateDailyNote";
+import { generateObsidianConfig } from "./generateObsidianConfig";
 import {
   dateParts,
   resolveFolders,
@@ -153,17 +154,17 @@ function generateReadme(config: VaultConfig, folders: string[]): string {
     ...folders.map((f) => `${f}/`),
     "```",
     "",
-    "## Core plugins to enable",
+    "## Core plugins",
     "",
     core.length ? core.map((c) => `- ${c}`).join("\n") : "_None selected._",
     "",
-    "Enable these under **Settings → Core plugins**.",
+    "> These are **already enabled** via the bundled `.obsidian/` config — just open the vault. (Tweak under **Settings → Core plugins**.)",
     "",
     "## Community plugins to install",
     "",
     community.length ? community.map((c) => `- ${c}`).join("\n") : "_None selected._",
     "",
-    "> Community plugins are **not** bundled in this vault. Install them manually via **Settings → Community plugins → Browse**, then enable each one.",
+    "> Community plugins are pre-listed in `.obsidian/community-plugins.json`, but their code is **not** bundled. Install each via **Settings → Community plugins → Browse** — they'll be enabled automatically once installed.",
     "",
   ];
 
@@ -304,6 +305,9 @@ export function generateVaultFiles(config: VaultConfig, now: Date = new Date()):
       : `${dailyFolder}/${sample.name}`;
     files[path] = sample.content;
   }
+
+  // Pre-baked Obsidian config so core plugins/settings are live on open.
+  Object.assign(files, generateObsidianConfig(config));
 
   // Root docs.
   files["README.md"] = generateReadme(config, folders);

@@ -65,6 +65,31 @@ describe("generateVaultFiles", () => {
     const paths = Object.keys(generateVaultFiles(cfg, NOW).files);
     expect(paths.some((p) => p.includes("2026-06-26-Example Project.md"))).toBe(true);
   });
+
+  it("pre-enables selected core plugins in .obsidian/core-plugins.json", () => {
+    const cfg = freshDefaultConfig(); // dev profile: graphView + dailyNotes on
+    const { files } = generateVaultFiles(cfg, NOW);
+    const core = JSON.parse(files[".obsidian/core-plugins.json"]);
+    expect(core["graph"]).toBe(true);
+    expect(core["daily-notes"]).toBe(true);
+    expect(core["file-explorer"]).toBe(true); // always-on basic
+  });
+
+  it("lists enabled community plugins by their Obsidian id", () => {
+    const cfg = freshDefaultConfig(); // dev profile: dataview + tasks on
+    const { files } = generateVaultFiles(cfg, NOW);
+    const community = JSON.parse(files[".obsidian/community-plugins.json"]);
+    expect(community).toContain("dataview");
+    expect(community).toContain("obsidian-tasks-plugin");
+  });
+
+  it("writes daily-notes settings with monthly path format when enabled", () => {
+    const cfg = freshDefaultConfig();
+    cfg.monthlySubfolders = true;
+    const { files } = generateVaultFiles(cfg, NOW);
+    const daily = JSON.parse(files[".obsidian/daily-notes.json"]);
+    expect(daily.format).toContain("MMMM");
+  });
 });
 
 describe("generateFolderTree", () => {
