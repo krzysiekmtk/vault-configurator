@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+.git
+.github
+npm-debug.log*
+.DS_Store
+*.md
+!README.md
+.env*
+coverage
+docs
