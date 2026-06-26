@@ -4,6 +4,7 @@ import {
   profileSchema,
   folderPresetSchema,
   filePrefixSchema,
+  tagStyleSchema,
   tagConfigSchema,
   dailyNoteSectionsSchema,
   corePluginsSchema,
@@ -15,6 +16,7 @@ export type VaultConfig = z.infer<typeof vaultConfigSchema>;
 export type ProfileId = z.infer<typeof profileSchema>;
 export type FolderPreset = z.infer<typeof folderPresetSchema>;
 export type FilePrefix = z.infer<typeof filePrefixSchema>;
+export type TagStyle = z.infer<typeof tagStyleSchema>;
 export type TagConfig = z.infer<typeof tagConfigSchema>;
 export type DailyNoteSections = z.infer<typeof dailyNoteSectionsSchema>;
 export type CorePlugins = z.infer<typeof corePluginsSchema>;

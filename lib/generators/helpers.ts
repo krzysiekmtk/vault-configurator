@@ -13,6 +13,7 @@ const MONTHS = [
 export interface DateParts {
   iso: string; // 2026-06-26
   compact: string; // 20260626
+  bracketMdy: string; // [06-26-2026]
   year: string; // 2026
   monthFolder: string; // 06 - June
 }
@@ -24,6 +25,7 @@ export function dateParts(date: Date): DateParts {
   return {
     iso: `${y}-${pad2(m)}-${pad2(d)}`,
     compact: `${y}${pad2(m)}${pad2(d)}`,
+    bracketMdy: `[${pad2(m)}-${pad2(d)}-${y}]`,
     year: String(y),
     monthFolder: `${pad2(m)} - ${MONTHS[date.getMonth()]}`,
   };
@@ -66,6 +68,8 @@ export function applyPrefix(
       return `${parts.iso}-${base}`;
     case "date-compact":
       return `${parts.compact}-${base}`;
+    case "date-bracket-mdy":
+      return `${parts.bracketMdy} ${base}`;
     case "type":
       return `${type}-${base}`;
     case "none":

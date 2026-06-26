@@ -3,12 +3,19 @@
 import { Tags } from "lucide-react";
 import { useVaultConfig } from "@/lib/state/useVaultConfig";
 import { TAG_GROUPS, TAG_GROUP_ORDER } from "@/lib/config/catalog";
-import { getCustomDisplayTags } from "@/lib/config/activeTags";
+import { getCustomDisplayTags, styleTag } from "@/lib/config/activeTags";
 import { normalizeTags } from "@/lib/utils/normalizeTags";
+import type { TagStyle } from "@/lib/config/types";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Toggle } from "@/components/ui/Toggle";
 import { Badge } from "@/components/ui/Badge";
 import { TextInput } from "@/components/ui/TextField";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+
+const TAG_STYLE_OPTIONS: { value: TagStyle; label: string }[] = [
+  { value: "nested", label: "Nested (#type/note)" },
+  { value: "flat", label: "Flat (#note)" },
+];
 
 export function TagConfig() {
   const { config, update } = useVaultConfig();
@@ -22,7 +29,21 @@ export function TagConfig() {
         description="Toggle built-in tag groups and add your own."
       />
       <CardBody className="space-y-4">
-        <div className="divide-y divide-border-soft">
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted">Tag style</label>
+          <SegmentedControl
+            ariaLabel="Tag style"
+            options={TAG_STYLE_OPTIONS}
+            value={config.tagStyle}
+            onChange={(v) => update((d) => { d.tagStyle = v; })}
+          />
+          <p className="text-xs text-muted">
+            Nested groups tags under #status, #type… in Obsidian&apos;s tag pane. Flat
+            uses simple tags like #note, #work.
+          </p>
+        </div>
+
+        <div className="divide-y divide-border-soft border-t border-border-soft pt-1">
           {TAG_GROUP_ORDER.map((key) => (
             <div key={key} className="py-2 first:pt-0 last:pb-0">
               <Toggle
@@ -33,7 +54,7 @@ export function TagConfig() {
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {TAG_GROUPS[key].tags.map((t) => (
                   <Badge key={t} tone={config.tags[key] ? "brand" : "muted"}>
-                    {t}
+                    {styleTag(t, config)}
                   </Badge>
                 ))}
               </div>

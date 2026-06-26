@@ -53,6 +53,7 @@ const EMPTY_PROFILE: ProfileConfig = {
   customFolders: [],
   monthlySubfolders: false,
   filePrefix: "none",
+  tagStyle: "nested",
   tags: { status: false, type: false, priority: false, area: false, custom: [] },
   dailyNoteSections: {
     tasks: false,
@@ -87,6 +88,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     customFolders: [],
     monthlySubfolders: true,
     filePrefix: "date-dash",
+    tagStyle: "nested",
     tags: { status: true, type: true, priority: true, area: true, custom: [] },
     dailyNoteSections: {
       tasks: true,
@@ -119,6 +121,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     customFolders: [],
     monthlySubfolders: true,
     filePrefix: "type",
+    tagStyle: "nested",
     tags: { status: true, type: true, priority: true, area: true, custom: [] },
     dailyNoteSections: {
       tasks: true,
@@ -151,6 +154,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     customFolders: [],
     monthlySubfolders: false,
     filePrefix: "none",
+    tagStyle: "nested",
     tags: { status: true, type: true, priority: false, area: true, custom: ["ideas", "drafts"] },
     dailyNoteSections: {
       tasks: false,
@@ -183,6 +187,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     customFolders: [],
     monthlySubfolders: true,
     filePrefix: "date-dash",
+    tagStyle: "nested",
     tags: { status: true, type: true, priority: true, area: true, custom: ["exam", "lecture"] },
     dailyNoteSections: {
       tasks: true,
@@ -215,6 +220,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     customFolders: [],
     monthlySubfolders: true,
     filePrefix: "date-dash",
+    tagStyle: "nested",
     tags: { status: true, type: true, priority: false, area: false, custom: [] },
     dailyNoteSections: {
       tasks: false,

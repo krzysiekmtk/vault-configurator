@@ -20,6 +20,7 @@ const PREFIX_OPTIONS: { value: FilePrefix; label: string }[] = [
   { value: "none", label: "None" },
   { value: "date-dash", label: "YYYY-MM-DD-" },
   { value: "date-compact", label: "YYYYMMDD-" },
+  { value: "date-bracket-mdy", label: "[MM-DD-YYYY]" },
   { value: "type", label: "Type" },
 ];
 

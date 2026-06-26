@@ -19,11 +19,20 @@ export const PROFILE_IDS = [
 
 export const FOLDER_PRESETS = ["minimal", "standard", "para", "custom"] as const;
 
-export const FILE_PREFIXES = ["none", "date-dash", "date-compact", "type"] as const;
+export const FILE_PREFIXES = [
+  "none",
+  "date-dash",
+  "date-compact",
+  "date-bracket-mdy",
+  "type",
+] as const;
+
+export const TAG_STYLES = ["nested", "flat"] as const;
 
 export const profileSchema = z.enum(PROFILE_IDS);
 export const folderPresetSchema = z.enum(FOLDER_PRESETS);
 export const filePrefixSchema = z.enum(FILE_PREFIXES);
+export const tagStyleSchema = z.enum(TAG_STYLES);
 
 export const tagConfigSchema = z.object({
   status: z.boolean(),
@@ -72,6 +81,8 @@ export const vaultConfigSchema = z.object({
   customFolders: z.array(z.string()),
   monthlySubfolders: z.boolean(),
   filePrefix: filePrefixSchema,
+  // `.default` keeps configs saved before this field was added valid on import.
+  tagStyle: tagStyleSchema.default("nested"),
   tags: tagConfigSchema,
   dailyNoteSections: dailyNoteSectionsSchema,
   corePlugins: corePluginsSchema,

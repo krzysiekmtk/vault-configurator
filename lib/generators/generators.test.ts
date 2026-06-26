@@ -83,6 +83,29 @@ describe("generateVaultFiles", () => {
     expect(community).toContain("obsidian-tasks-plugin");
   });
 
+  it("applies the bracketed [MM-DD-YYYY] prefix to sample notes", () => {
+    const cfg = freshDefaultConfig();
+    cfg.filePrefix = "date-bracket-mdy";
+    const paths = Object.keys(generateVaultFiles(cfg, NOW).files);
+    expect(paths.some((p) => p.includes("[06-26-2026] Example Project.md"))).toBe(true);
+  });
+
+  it("emits flat tags when tagStyle is flat", () => {
+    const cfg = freshDefaultConfig();
+    cfg.tagStyle = "flat";
+    const { files } = generateVaultFiles(cfg, NOW);
+    const project = files["10 Projects/2026-06-26-Example Project.md"];
+    expect(project).toContain("- project");
+    expect(project).not.toContain("type/project");
+  });
+
+  it("emits nested tags by default", () => {
+    const cfg = freshDefaultConfig();
+    const { files } = generateVaultFiles(cfg, NOW);
+    const project = files["10 Projects/2026-06-26-Example Project.md"];
+    expect(project).toContain("- type/project");
+  });
+
   it("writes daily-notes settings with monthly path format when enabled", () => {
     const cfg = freshDefaultConfig();
     cfg.monthlySubfolders = true;

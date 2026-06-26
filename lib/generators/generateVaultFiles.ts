@@ -1,6 +1,6 @@
 import type { VaultConfig } from "../config/types";
 import { CORE_PLUGINS, COMMUNITY_PLUGINS } from "../config/catalog";
-import { getActiveTags } from "../config/activeTags";
+import { getActiveTags, styleSlug } from "../config/activeTags";
 import { generateDailyNote } from "./generateDailyNote";
 import { generateObsidianConfig } from "./generateObsidianConfig";
 import {
@@ -78,7 +78,8 @@ function exampleProjectNote(config: VaultConfig, parts: DateParts): string {
   const tags = ["type/project"];
   if (config.tags.status) tags.push("status/wip");
   if (config.tags.priority) tags.push("priority/high");
-  return `${frontmatter(tags, { created: parts.iso })}# Example Project
+  const styled = tags.map((t) => styleSlug(t, config));
+  return `${frontmatter(styled, { created: parts.iso })}# Example Project
 
 A sample project note showing how your vault is structured.
 
@@ -96,7 +97,8 @@ Link related notes with [[Useful Links]].
 }
 
 function areaNote(config: VaultConfig): string {
-  const tags = config.tags.area ? ["area/work", "type/note"] : ["type/note"];
+  const raw = config.tags.area ? ["area/work", "type/note"] : ["type/note"];
+  const tags = raw.map((t) => styleSlug(t, config));
   return `${frontmatter(tags)}# Work
 
 An "Area" represents an ongoing responsibility — not a project with an end date.
@@ -106,8 +108,8 @@ An "Area" represents an ongoing responsibility — not a project with an end dat
 `;
 }
 
-function resourceNote(): string {
-  return `${frontmatter(["type/note"])}# Useful Links
+function resourceNote(config: VaultConfig): string {
+  return `${frontmatter([styleSlug("type/note", config)])}# Useful Links
 
 A place to collect references and resources.
 
@@ -288,7 +290,7 @@ export function generateVaultFiles(config: VaultConfig, now: Date = new Date()):
   const resourceFolder = findFolder(folders, "resource");
   if (resourceFolder) {
     const name = applyPrefix(config, "Useful Links", "note", parts);
-    files[`${resourceFolder}/${name}.md`] = resourceNote();
+    files[`${resourceFolder}/${name}.md`] = resourceNote(config);
   }
 
   const notesFolder = findFolder(folders, "notes");

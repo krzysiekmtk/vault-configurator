@@ -8,6 +8,7 @@ const PREFIX_LABEL: Record<VaultConfig["filePrefix"], string> = {
   none: "no filename prefix",
   "date-dash": "a `YYYY-MM-DD-` filename prefix",
   "date-compact": "a `YYYYMMDD-` filename prefix",
+  "date-bracket-mdy": "a bracketed `[MM-DD-YYYY]` date prefix",
   type: "a type-based filename prefix (e.g. `project-`, `note-`, `meeting-`)",
 };
 
