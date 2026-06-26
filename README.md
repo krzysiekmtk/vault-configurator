@@ -1,5 +1,7 @@
 # Vault Configurator
 
+[![CI](https://github.com/krzysiekmtk/vault-configurator/actions/workflows/ci.yml/badge.svg)](https://github.com/krzysiekmtk/vault-configurator/actions/workflows/ci.yml)
+
 **Build your perfect Obsidian vault in minutes.**
 
 Configure an Obsidian vault visually, watch a live preview update as you go, then
