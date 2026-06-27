@@ -3,11 +3,17 @@
 import { Boxes, AlertTriangle, X } from "lucide-react";
 import { useVaultConfig } from "@/lib/state/useVaultConfig";
 import { ProfileSelector } from "@/components/config/ProfileSelector";
+import { WorkflowPacksConfig } from "@/components/config/WorkflowPacksConfig";
+import { ExperienceLevelConfig } from "@/components/config/ExperienceLevelConfig";
 import { FolderConfig } from "@/components/config/FolderConfig";
+import { PropertiesConfig } from "@/components/config/PropertiesConfig";
 import { TagConfig } from "@/components/config/TagConfig";
 import { DailyNoteConfig } from "@/components/config/DailyNoteConfig";
+import { DashboardConfig } from "@/components/config/DashboardConfig";
+import { BasesConfig } from "@/components/config/BasesConfig";
 import { PluginConfig } from "@/components/config/PluginConfig";
 import { SyncConfig } from "@/components/config/SyncConfig";
+import { VaultHealthPanel } from "@/components/health/VaultHealthPanel";
 import { PreviewPanel } from "@/components/preview/PreviewPanel";
 import { DownloadZipButton } from "@/components/actions/DownloadZipButton";
 import { ExportImportPanel } from "@/components/actions/ExportImportPanel";
@@ -52,9 +58,14 @@ export default function Home() {
         {/* Left: configuration */}
         <div className="space-y-4">
           <ProfileSelector />
+          <WorkflowPacksConfig />
+          <ExperienceLevelConfig />
           <FolderConfig />
+          <PropertiesConfig />
           <TagConfig />
           <DailyNoteConfig />
+          <DashboardConfig />
+          <BasesConfig />
           <PluginConfig />
           <SyncConfig />
         </div>
@@ -63,6 +74,7 @@ export default function Home() {
         <div className="lg:sticky lg:top-6 lg:h-fit lg:self-start">
           <div className="space-y-4">
             <DownloadZipButton />
+            <VaultHealthPanel />
             {hydrated ? (
               <PreviewPanel />
             ) : (

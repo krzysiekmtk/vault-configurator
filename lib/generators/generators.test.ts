@@ -5,6 +5,7 @@ import { generateDailyNote } from "./generateDailyNote";
 import { generateFolderTree } from "./generateFolderTree";
 import { generateVaultFiles } from "./generateVaultFiles";
 import { generatePrompt } from "./generatePrompt";
+import { buildFrontmatter } from "./generateFrontmatter";
 
 const NOW = new Date(2026, 5, 26); // 2026-06-26, deterministic
 
@@ -112,6 +113,106 @@ describe("generateVaultFiles", () => {
     const { files } = generateVaultFiles(cfg, NOW);
     const daily = JSON.parse(files[".obsidian/daily-notes.json"]);
     expect(daily.format).toContain("MMMM");
+  });
+});
+
+describe("workflow packs", () => {
+  it("emits pack templates and sample notes for selected packs", () => {
+    const cfg = freshDefaultConfig(); // dev: projects, tasks, meetings, research
+    const { files } = generateVaultFiles(cfg, NOW);
+    expect(files["Templates/Research Note.md"]).toBeDefined();
+    expect(files["Templates/Source Note.md"]).toBeDefined();
+    // sample notes placed by folder role
+    const paths = Object.keys(files);
+    expect(paths.some((p) => p.includes("Example Project"))).toBe(true);
+    expect(paths.some((p) => p.includes("Example Research"))).toBe(true);
+  });
+
+  it("does not emit a pack's templates when the pack is off", () => {
+    const cfg = freshDefaultConfig();
+    cfg.workflowPacks = ["projects"];
+    const { files } = generateVaultFiles(cfg, NOW);
+    expect(files["Templates/Project Note.md"]).toBeDefined();
+    expect(files["Templates/Person Note.md"]).toBeUndefined();
+  });
+
+  it("adds the People pack's Home section only when selected", () => {
+    const cfg = freshDefaultConfig();
+    cfg.workflowPacks = ["people"];
+    cfg.dashboard.enabled = true;
+    const { files } = generateVaultFiles(cfg, NOW);
+    expect(files["Home.md"]).toContain("## People");
+  });
+});
+
+describe("properties / frontmatter", () => {
+  it("omits frontmatter entirely when useFrontmatter is off", () => {
+    const cfg = freshDefaultConfig();
+    expect(buildFrontmatter({ ...cfg, properties: { useFrontmatter: false, enabled: [] } }, [["type", "project"]])).toBe("");
+  });
+
+  it("only emits enabled governed properties but always passes pack-specific ones", () => {
+    const cfg = freshDefaultConfig();
+    cfg.properties = { useFrontmatter: true, enabled: ["type"] };
+    const fm = buildFrontmatter(cfg, [["type", "meeting"], ["created", "2026-06-26"], ["attendees", ""]]);
+    expect(fm).toContain("type: meeting");
+    expect(fm).not.toContain("created:"); // governed + disabled
+    expect(fm).toContain("attendees:"); // not governed -> always passes
+  });
+
+  it("emits a tags list only when the tags property is enabled", () => {
+    const cfg = freshDefaultConfig();
+    cfg.properties = { useFrontmatter: true, enabled: ["tags"] };
+    expect(buildFrontmatter(cfg, [], ["type/note"])).toContain("- type/note");
+    cfg.properties = { useFrontmatter: true, enabled: [] };
+    expect(buildFrontmatter(cfg, [], ["type/note"])).toBe("");
+  });
+});
+
+describe("home dashboard + onboarding + bases", () => {
+  it("always ships the four onboarding docs", () => {
+    const cfg = freshDefaultConfig();
+    const { files } = generateVaultFiles(cfg, NOW);
+    expect(files["START HERE.md"]).toBeDefined();
+    expect(files["First 7 Days.md"]).toBeDefined();
+    expect(files["Vault Map.md"]).toBeDefined();
+    expect(files["How to Use This Vault.md"]).toBeDefined();
+  });
+
+  it("emits Home.md when the dashboard is enabled and omits it when disabled", () => {
+    const cfg = freshDefaultConfig();
+    expect(generateVaultFiles(cfg, NOW).files["Home.md"]).toBeDefined();
+    cfg.dashboard.enabled = false;
+    expect(generateVaultFiles(cfg, NOW).files["Home.md"]).toBeUndefined();
+  });
+
+  it("adds a Dataview block to Home when dataview is on", () => {
+    const cfg = freshDefaultConfig(); // dev has dataview + activeProjects section
+    const home = generateVaultFiles(cfg, NOW).files["Home.md"];
+    expect(home).toContain("```dataview");
+  });
+
+  it("generates Bases docs only when enabled", () => {
+    const cfg = freshDefaultConfig(); // dev: bases enabled
+    const { files } = generateVaultFiles(cfg, NOW);
+    expect(files["Bases/README.md"]).toBeDefined();
+    expect(files["Bases/Projects base.md"]).toBeDefined();
+    cfg.bases.enabled = false;
+    expect(generateVaultFiles(cfg, NOW).files["Bases/README.md"]).toBeUndefined();
+  });
+});
+
+describe("generatePrompt — P0 sections", () => {
+  it("includes workflows, properties, dashboard, bases, sync and health", () => {
+    const cfg = freshDefaultConfig();
+    const prompt = generatePrompt(cfg, NOW);
+    expect(prompt).toContain("## What this vault is for");
+    expect(prompt).toContain("## Properties / frontmatter");
+    expect(prompt).toContain("## Home dashboard");
+    expect(prompt).toContain("## Bases / database views");
+    expect(prompt).toContain("## Devices & sync");
+    expect(prompt).toContain("## Setup health");
+    expect(prompt).toContain("## Onboarding docs");
   });
 });
 

@@ -1,5 +1,6 @@
 import type { VaultConfig } from "../config/types";
 import { vaultConfigSchema } from "../config/schema";
+import { normalizeConfig } from "../config/io";
 
 /** Base64url encode a UTF-8 string (URL-safe, no padding). */
 function toBase64Url(str: string): string {
@@ -42,7 +43,7 @@ export function decodeConfigFromHash(hash: string): VaultConfig | null {
     if (!raw.startsWith(HASH_PREFIX)) return null;
     const json = fromBase64Url(raw.slice(HASH_PREFIX.length));
     const parsed = vaultConfigSchema.safeParse(JSON.parse(json));
-    return parsed.success ? parsed.data : null;
+    return parsed.success ? normalizeConfig(parsed.data) : null;
   } catch {
     return null;
   }

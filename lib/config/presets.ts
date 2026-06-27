@@ -2,7 +2,9 @@ import type {
   VaultConfig,
   ProfileId,
   FolderPreset,
+  PropertyKey,
 } from "./types";
+import { PROPERTY_KEYS } from "./schema";
 
 /** Folder lists for each structure preset. `custom` is user-driven. */
 export const FOLDER_PRESET_TREES: Record<Exclude<FolderPreset, "custom">, string[]> = {
@@ -29,6 +31,9 @@ export const FOLDER_PRESET_TREES: Record<Exclude<FolderPreset, "custom">, string
 
 /** The part of a config that a profile controls (everything except its own id + vault name). */
 export type ProfileConfig = Omit<VaultConfig, "profile" | "vaultName">;
+
+/** All properties on — the default for every profile except Empty. */
+const ALL_PROPERTIES: PropertyKey[] = [...PROPERTY_KEYS];
 
 export const PROFILE_LABELS: Record<ProfileId, string> = {
   dev: "Dev",
@@ -80,6 +85,13 @@ const EMPTY_PROFILE: ProfileConfig = {
     calendar: false,
   },
   sync: { git: false, icloud: false },
+  workflowPacks: [],
+  properties: { useFrontmatter: false, enabled: [] },
+  bases: { enabled: false, views: [] },
+  dashboard: { enabled: false, sections: [] },
+  experienceLevel: "balanced",
+  devices: ["desktop"],
+  syncStrategy: "none",
 };
 
 export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
@@ -115,6 +127,16 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
       calendar: false,
     },
     sync: { git: true, icloud: false },
+    workflowPacks: ["projects", "tasks", "meetings", "research"],
+    properties: { useFrontmatter: true, enabled: ALL_PROPERTIES },
+    bases: { enabled: true, views: ["projects", "tasks", "meetings", "research"] },
+    dashboard: {
+      enabled: true,
+      sections: ["quickCapture", "activeProjects", "openTasks", "recentMeetings", "weeklyReview"],
+    },
+    experienceLevel: "power",
+    devices: ["desktop"],
+    syncStrategy: "git",
   },
   manager: {
     folderPreset: "standard",
@@ -148,6 +170,16 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
       calendar: true,
     },
     sync: { git: false, icloud: true },
+    workflowPacks: ["projects", "tasks", "meetings", "people"],
+    properties: { useFrontmatter: true, enabled: ALL_PROPERTIES },
+    bases: { enabled: true, views: ["projects", "tasks", "meetings", "people"] },
+    dashboard: {
+      enabled: true,
+      sections: ["quickCapture", "activeProjects", "openTasks", "recentMeetings", "weeklyReview"],
+    },
+    experienceLevel: "balanced",
+    devices: ["desktop", "iphone"],
+    syncStrategy: "icloud",
   },
   creative: {
     folderPreset: "standard",
@@ -181,6 +213,16 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
       calendar: false,
     },
     sync: { git: false, icloud: false },
+    workflowPacks: ["content", "research", "journal"],
+    properties: { useFrontmatter: true, enabled: ALL_PROPERTIES },
+    bases: { enabled: false, views: [] },
+    dashboard: {
+      enabled: true,
+      sections: ["quickCapture", "contentPipeline", "weeklyReview"],
+    },
+    experienceLevel: "balanced",
+    devices: ["desktop", "ipad"],
+    syncStrategy: "none",
   },
   student: {
     folderPreset: "standard",
@@ -214,6 +256,16 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
       calendar: true,
     },
     sync: { git: false, icloud: true },
+    workflowPacks: ["learning", "research", "reading", "tasks"],
+    properties: { useFrontmatter: true, enabled: ALL_PROPERTIES },
+    bases: { enabled: true, views: ["research", "reading", "tasks"] },
+    dashboard: {
+      enabled: true,
+      sections: ["quickCapture", "openTasks", "readingList", "weeklyReview"],
+    },
+    experienceLevel: "beginner",
+    devices: ["desktop", "iphone"],
+    syncStrategy: "icloud",
   },
   journal: {
     folderPreset: "minimal",
@@ -247,6 +299,16 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
       calendar: true,
     },
     sync: { git: false, icloud: true },
+    workflowPacks: ["journal", "reading"],
+    properties: { useFrontmatter: true, enabled: ALL_PROPERTIES },
+    bases: { enabled: false, views: [] },
+    dashboard: {
+      enabled: true,
+      sections: ["quickCapture", "readingList"],
+    },
+    experienceLevel: "beginner",
+    devices: ["iphone"],
+    syncStrategy: "icloud",
   },
   empty: EMPTY_PROFILE,
 };
@@ -257,7 +319,7 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
  */
 export function applyProfile(config: VaultConfig, profile: ProfileId): VaultConfig {
   return {
-    ...PROFILE_PRESETS[profile],
+    ...structuredClone(PROFILE_PRESETS[profile]),
     profile,
     vaultName: config.vaultName,
   };
