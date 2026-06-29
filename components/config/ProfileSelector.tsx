@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Code2, Briefcase, Palette, GraduationCap, BookHeart, FileQuestion } from "lucide-react";
 import type { ProfileId } from "@/lib/config/types";
 import { PROFILE_IDS } from "@/lib/config/schema";
@@ -19,6 +20,22 @@ const ICONS: Record<ProfileId, React.ReactNode> = {
 
 export function ProfileSelector() {
   const { config, setProfile } = useVaultConfig();
+  const [pending, setPending] = useState<ProfileId | null>(null);
+
+  function handleClick(id: ProfileId) {
+    if (id === config.profile) return;
+    setPending(id);
+  }
+
+  function confirmSwitch() {
+    if (!pending) return;
+    setProfile(pending);
+    setPending(null);
+  }
+
+  function cancelSwitch() {
+    setPending(null);
+  }
 
   return (
     <Card>
@@ -26,14 +43,14 @@ export function ProfileSelector() {
         title="Starter profile"
         description="Pick a starting point. It configures everything below — tweak freely after."
       />
-      <CardBody>
+      <CardBody className="space-y-3">
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {PROFILE_IDS.map((id) => {
             const active = config.profile === id;
             return (
               <button
                 key={id}
-                onClick={() => setProfile(id)}
+                onClick={() => handleClick(id)}
                 aria-pressed={active}
                 title={PROFILE_DESCRIPTIONS[id]}
                 className={cn(
@@ -55,6 +72,29 @@ export function ProfileSelector() {
             );
           })}
         </div>
+
+        {pending && (
+          <div className="flex items-center gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2.5 text-sm">
+            <span className="text-amber-200">
+              This will overwrite your current settings. Switch to{" "}
+              <strong>{PROFILE_LABELS[pending]}</strong>?
+            </span>
+            <div className="ml-auto flex shrink-0 gap-2">
+              <button
+                onClick={confirmSwitch}
+                className="rounded-md bg-brand px-3 py-1 text-xs font-semibold text-white hover:bg-brand/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70"
+              >
+                Yes
+              </button>
+              <button
+                onClick={cancelSwitch}
+                className="rounded-md border border-border px-3 py-1 text-xs text-muted hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </CardBody>
     </Card>
   );

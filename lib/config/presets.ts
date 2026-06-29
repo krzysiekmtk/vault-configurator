@@ -92,6 +92,8 @@ const EMPTY_PROFILE: ProfileConfig = {
   experienceLevel: "balanced",
   devices: ["desktop"],
   syncStrategy: "none",
+  templateLibrary: [],
+  promptMode: "new-vault",
 };
 
 export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
@@ -137,6 +139,8 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     experienceLevel: "power",
     devices: ["desktop"],
     syncStrategy: "git",
+    templateLibrary: [],
+    promptMode: "new-vault",
   },
   manager: {
     folderPreset: "standard",
@@ -180,6 +184,8 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     experienceLevel: "balanced",
     devices: ["desktop", "iphone"],
     syncStrategy: "icloud",
+    templateLibrary: [],
+    promptMode: "new-vault",
   },
   creative: {
     folderPreset: "standard",
@@ -223,6 +229,8 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     experienceLevel: "balanced",
     devices: ["desktop", "ipad"],
     syncStrategy: "none",
+    templateLibrary: [],
+    promptMode: "new-vault",
   },
   student: {
     folderPreset: "standard",
@@ -266,6 +274,8 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     experienceLevel: "beginner",
     devices: ["desktop", "iphone"],
     syncStrategy: "icloud",
+    templateLibrary: [],
+    promptMode: "new-vault",
   },
   journal: {
     folderPreset: "minimal",
@@ -309,6 +319,8 @@ export const PROFILE_PRESETS: Record<ProfileId, ProfileConfig> = {
     experienceLevel: "beginner",
     devices: ["iphone"],
     syncStrategy: "icloud",
+    templateLibrary: [],
+    promptMode: "new-vault",
   },
   empty: EMPTY_PROFILE,
 };

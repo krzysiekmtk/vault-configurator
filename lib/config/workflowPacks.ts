@@ -329,4 +329,63 @@ export const WORKFLOW_PACKS: Record<WorkflowPack, PackDef> = {
     },
     baseView: "reading",
   },
+
+  "monthly-review": {
+    templates: [
+      {
+        name: "Monthly Review",
+        kind: "monthly-review",
+        props: [
+          ["type", "monthly-review"],
+          ["month", "{{date}}"],
+          ["status", "open"],
+          ["created", "{{date}}"],
+        ],
+        body: `# Monthly Review — {{date}}\n\n## Highlights\n- \n\n## Goals met\n- [ ] \n\n## What didn't go as planned\n- \n\n## Next month focus\n- \n`,
+      },
+    ],
+    homeSection: {
+      title: "Monthly Review",
+      body: "Review the month every 1st. Link to this month's review note.",
+    },
+  },
+
+  "quarterly-review": {
+    templates: [
+      {
+        name: "Quarterly Planning",
+        kind: "quarterly-review",
+        props: [
+          ["type", "quarterly-review"],
+          ["quarter", ""],
+          ["status", "open"],
+          ["created", "{{date}}"],
+        ],
+        body: `# Quarterly Planning — {{date}}\n\n## OKRs / Big goals\n- \n\n## Projects to complete\n- [ ] \n\n## Mid-quarter check-in\n- \n\n## End-of-quarter review\n- \n`,
+      },
+    ],
+    homeSection: {
+      title: "Quarterly Planning",
+      body: "Review every 3 months. Set 3 clear objectives per quarter.",
+    },
+  },
+
+  "yearly-review": {
+    templates: [
+      {
+        name: "Yearly Review",
+        kind: "yearly-review",
+        props: [
+          ["type", "yearly-review"],
+          ["year", ""],
+          ["created", "{{date}}"],
+        ],
+        body: `# Yearly Review — {{date}}\n\n## Top wins\n- \n\n## Biggest lessons\n- \n\n## Next-year goals\n- [ ] \n\n## Gratitude\n- \n`,
+      },
+    ],
+    homeSection: {
+      title: "Yearly Review",
+      body: "Annual reflection every December. Link to this year's note.",
+    },
+  },
 };

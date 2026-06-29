@@ -4,6 +4,7 @@ import { Boxes, AlertTriangle, X } from "lucide-react";
 import { useVaultConfig } from "@/lib/state/useVaultConfig";
 import { ProfileSelector } from "@/components/config/ProfileSelector";
 import { WorkflowPacksConfig } from "@/components/config/WorkflowPacksConfig";
+import { PromptModeConfig } from "@/components/config/PromptModeConfig";
 import { ExperienceLevelConfig } from "@/components/config/ExperienceLevelConfig";
 import { FolderConfig } from "@/components/config/FolderConfig";
 import { PropertiesConfig } from "@/components/config/PropertiesConfig";
@@ -12,11 +13,13 @@ import { DailyNoteConfig } from "@/components/config/DailyNoteConfig";
 import { DashboardConfig } from "@/components/config/DashboardConfig";
 import { BasesConfig } from "@/components/config/BasesConfig";
 import { PluginConfig } from "@/components/config/PluginConfig";
+import { TemplateLibraryConfig } from "@/components/config/TemplateLibraryConfig";
 import { SyncConfig } from "@/components/config/SyncConfig";
 import { VaultHealthPanel } from "@/components/health/VaultHealthPanel";
 import { PreviewPanel } from "@/components/preview/PreviewPanel";
 import { DownloadZipButton } from "@/components/actions/DownloadZipButton";
 import { ExportImportPanel } from "@/components/actions/ExportImportPanel";
+import { Hero } from "@/components/landing/Hero";
 
 function ShareErrorBanner() {
   const { shareError, dismissShareError } = useVaultConfig();
@@ -52,6 +55,7 @@ export default function Home() {
         </div>
       </header>
 
+      <Hero />
       <ShareErrorBanner />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -59,6 +63,7 @@ export default function Home() {
         <div className="space-y-4">
           <ProfileSelector />
           <WorkflowPacksConfig />
+          <PromptModeConfig />
           <ExperienceLevelConfig />
           <FolderConfig />
           <PropertiesConfig />
@@ -67,6 +72,7 @@ export default function Home() {
           <DashboardConfig />
           <BasesConfig />
           <PluginConfig />
+          <TemplateLibraryConfig />
           <SyncConfig />
         </div>
 

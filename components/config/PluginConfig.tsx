@@ -1,10 +1,12 @@
 "use client";
 
-import { Plug, Boxes } from "lucide-react";
+import { Plug, Boxes, Zap } from "lucide-react";
 import { useVaultConfig } from "@/lib/state/useVaultConfig";
 import { CORE_PLUGINS, COMMUNITY_PLUGINS } from "@/lib/config/catalog";
+import { PLUGIN_PACKS } from "@/lib/config/pluginPacks";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { cn } from "@/lib/utils/cn";
 
 export function PluginConfig() {
   const { config, update } = useVaultConfig();
@@ -17,6 +19,28 @@ export function PluginConfig() {
         description="Recommendations only — nothing is installed for you. Community plugins must be added manually in Obsidian."
       />
       <CardBody className="space-y-4">
+        <div>
+          <p className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted">
+            <Zap size={13} /> Quick apply
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {PLUGIN_PACKS.map((pack) => (
+              <button
+                key={pack.key}
+                title={pack.description}
+                onClick={() => update((d) => pack.apply(d))}
+                className={cn(
+                  "rounded-md border border-border bg-bg-soft px-2.5 py-1 text-xs text-muted",
+                  "transition-colors hover:border-brand/40 hover:text-white",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70",
+                )}
+              >
+                {pack.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div>
           <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">Core plugins</p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">

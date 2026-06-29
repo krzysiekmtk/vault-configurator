@@ -6,7 +6,10 @@ import { resolveFolders, findFolder, type DateParts } from "./helpers";
 const FENCE = "```";
 
 /** Pack ids whose Home section is appended (no fixed Dashboard toggle). */
-const EXTRA_SECTION_PACKS = ["research", "people", "learning", "journal"] as const;
+const EXTRA_SECTION_PACKS = [
+  "research", "people", "learning", "journal",
+  "monthly-review", "quarterly-review", "yearly-review",
+] as const;
 
 /**
  * Build `Home.md` — the vault dashboard. Returns "" when the dashboard is

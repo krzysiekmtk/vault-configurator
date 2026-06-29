@@ -10,6 +10,8 @@ import type {
   ExperienceLevel,
   Device,
   SyncStrategy,
+  TemplateLibraryId,
+  PromptMode,
 } from "./types";
 
 /**
@@ -76,6 +78,9 @@ export const WORKFLOW_PACK_DEFS: { key: WorkflowPack; label: string; description
   { key: "journal", label: "Journal", description: "Daily reflection and personal logging." },
   { key: "people", label: "People / CRM", description: "Contacts, companies and last-touch tracking." },
   { key: "reading", label: "Reading List", description: "Books and articles with status and ratings." },
+  { key: "monthly-review", label: "Monthly Review", description: "Close the month and plan the next." },
+  { key: "quarterly-review", label: "Quarterly Planning", description: "Set and review 90-day goals." },
+  { key: "yearly-review", label: "Yearly Review", description: "Annual reflection and goal setting." },
 ];
 
 export const PROPERTY_DEFS: { key: PropertyKey; label: string; description: string }[] = [
@@ -133,4 +138,23 @@ export const SYNC_STRATEGY_DEFS: { key: SyncStrategy; label: string; description
   { key: "icloud", label: "iCloud", description: "Great on Apple devices. Watch multi-device conflicts." },
   { key: "git", label: "Git", description: "Powerful for technical users. Weak on mobile." },
   { key: "dropbox-onedrive", label: "Dropbox / OneDrive", description: "Works, but mind temp files and conflicts." },
+];
+
+export const TEMPLATE_LIBRARY_DEFS: { key: TemplateLibraryId; label: string; description: string }[] = [
+  { key: "decision-log", label: "Decision Log", description: "Record key decisions with context and rationale." },
+  { key: "bug-report", label: "Bug Report", description: "Track bugs with steps to reproduce and fix status." },
+  { key: "sprint-note", label: "Sprint Note", description: "Plan and review a sprint or iteration." },
+  { key: "goal-note", label: "Goal Note", description: "Define a goal with milestones and progress tracking." },
+  { key: "web-clip", label: "Web Clip", description: "Save and annotate web pages." },
+  { key: "youtube-note", label: "YouTube Note", description: "Notes for YouTube videos with timestamps." },
+  { key: "pdf-note", label: "PDF Note", description: "Annotate PDFs and documents." },
+  { key: "code-snippet", label: "Code Snippet", description: "Save reusable code with usage notes." },
+  { key: "quote", label: "Quote", description: "Save meaningful quotes with context." },
+];
+
+export const PROMPT_MODE_DEFS: { key: PromptMode; label: string; description: string }[] = [
+  { key: "new-vault", label: "Create new vault", description: "Full instructions to build this vault from scratch." },
+  { key: "templates-only", label: "Templates only", description: "Generate only the template files listed." },
+  { key: "readme-only", label: "README & CLAUDE.md only", description: "Generate documentation files for an existing vault." },
+  { key: "implementation-plan", label: "Implementation plan", description: "Structured step-by-step plan — no shell commands." },
 ];

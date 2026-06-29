@@ -20,6 +20,8 @@ import {
   propertiesConfigSchema,
   basesConfigSchema,
   dashboardConfigSchema,
+  templateLibrarySchema,
+  promptModeSchema,
 } from "./schema";
 
 export type VaultConfig = z.infer<typeof vaultConfigSchema>;
@@ -43,6 +45,8 @@ export type SyncStrategy = z.infer<typeof syncStrategySchema>;
 export type PropertiesConfig = z.infer<typeof propertiesConfigSchema>;
 export type BasesConfig = z.infer<typeof basesConfigSchema>;
 export type DashboardConfig = z.infer<typeof dashboardConfigSchema>;
+export type TemplateLibraryId = z.infer<typeof templateLibrarySchema>;
+export type PromptMode = z.infer<typeof promptModeSchema>;
 
 export type CorePluginKey = keyof CorePlugins;
 export type CommunityPluginKey = keyof CommunityPlugins;

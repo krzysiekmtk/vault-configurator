@@ -1,6 +1,7 @@
 import type { VaultConfig } from "../config/types";
 import { CORE_PLUGINS, COMMUNITY_PLUGINS, WORKFLOW_PACK_DEFS } from "../config/catalog";
 import { WORKFLOW_PACKS } from "../config/workflowPacks";
+import { generateManifest, generateManifestMd } from "./generateManifest";
 import { getActiveTags, styleSlug } from "../config/activeTags";
 import { generateDailyNote } from "./generateDailyNote";
 import { generateObsidianConfig } from "./generateObsidianConfig";
@@ -328,6 +329,10 @@ export function generateVaultFiles(config: VaultConfig, now: Date = new Date()):
   files["README.md"] = generateReadme(config, folders);
   files["CLAUDE.md"] = generateClaudeMd(config, folders);
   if (config.sync.git) files[".gitignore"] = gitignore();
+
+  // Manifest — computed last so it counts everything above.
+  const manifest = generateManifest(config, { folders, files });
+  files["VAULT MANIFEST.md"] = generateManifestMd(manifest, config);
 
   return { folders, files };
 }

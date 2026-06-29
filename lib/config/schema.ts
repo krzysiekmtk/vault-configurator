@@ -41,6 +41,9 @@ export const WORKFLOW_PACK_IDS = [
   "journal",
   "people",
   "reading",
+  "monthly-review",
+  "quarterly-review",
+  "yearly-review",
 ] as const;
 
 export const PROPERTY_KEYS = [
@@ -90,6 +93,25 @@ export const SYNC_STRATEGIES = [
   "dropbox-onedrive",
 ] as const;
 
+export const TEMPLATE_LIBRARY_IDS = [
+  "decision-log",
+  "bug-report",
+  "sprint-note",
+  "goal-note",
+  "web-clip",
+  "youtube-note",
+  "pdf-note",
+  "code-snippet",
+  "quote",
+] as const;
+
+export const PROMPT_MODES = [
+  "new-vault",
+  "templates-only",
+  "readme-only",
+  "implementation-plan",
+] as const;
+
 export const profileSchema = z.enum(PROFILE_IDS);
 export const folderPresetSchema = z.enum(FOLDER_PRESETS);
 export const filePrefixSchema = z.enum(FILE_PREFIXES);
@@ -101,6 +123,8 @@ export const dashboardSectionSchema = z.enum(DASHBOARD_SECTIONS);
 export const experienceLevelSchema = z.enum(EXPERIENCE_LEVELS);
 export const deviceSchema = z.enum(DEVICE_IDS);
 export const syncStrategySchema = z.enum(SYNC_STRATEGIES);
+export const templateLibrarySchema = z.enum(TEMPLATE_LIBRARY_IDS);
+export const promptModeSchema = z.enum(PROMPT_MODES);
 
 export const propertiesConfigSchema = z.object({
   useFrontmatter: z.boolean(),
@@ -183,4 +207,7 @@ export const vaultConfigSchema = z.object({
   experienceLevel: experienceLevelSchema.default("balanced"),
   devices: z.array(deviceSchema).default(["desktop"]),
   syncStrategy: syncStrategySchema.default("none"),
+  // --- P1 fields. All defaulted so older configs still parse. ---
+  templateLibrary: z.array(templateLibrarySchema).default([]),
+  promptMode: promptModeSchema.default("new-vault"),
 });

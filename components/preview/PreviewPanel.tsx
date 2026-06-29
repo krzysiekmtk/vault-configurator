@@ -7,9 +7,13 @@ import { FolderTreePreview } from "./FolderTreePreview";
 import { DailyNotePreview } from "./DailyNotePreview";
 import { GraphPreview } from "./GraphPreview";
 import { PromptPreview } from "./PromptPreview";
+import { ManifestPanel } from "./ManifestPanel";
+import { FilesListPanel } from "./FilesListPanel";
 
 const TABS: TabItem[] = [
   { id: "tree", label: "Folder Tree" },
+  { id: "files", label: "Files" },
+  { id: "manifest", label: "Manifest" },
   { id: "daily", label: "Daily Note" },
   { id: "graph", label: "Graph" },
   { id: "prompt", label: "Claude Prompt" },
@@ -24,6 +28,8 @@ export function PreviewPanel() {
       <Card>
         <CardBody className="max-h-[calc(100vh-280px)] overflow-auto">
           {active === "tree" && <FolderTreePreview />}
+          {active === "files" && <FilesListPanel />}
+          {active === "manifest" && <ManifestPanel />}
           {active === "daily" && <DailyNotePreview />}
           {active === "graph" && <GraphPreview />}
           {active === "prompt" && <PromptPreview />}
